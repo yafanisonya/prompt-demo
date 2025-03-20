@@ -1,7 +1,7 @@
 <template>
   <section id="main" class="min-h-screen relative overflow-hidden">
-    <!-- 粒子背景（如需要） -->
-    <div id="particleBackground" class="absolute top-0 left-0 w-full h-full"></div>
+    <!-- 粒子背景 -->
+    <canvas id="particleBackground" class="absolute top-0 left-0 w-full h-full"></canvas>
     
     <!-- 背景渐变效果 -->
     <div class="absolute top-1/4 left-1/4 w-96 h-96 hero-gradient"></div>
@@ -60,16 +60,60 @@
 </template>
 
 <script>
+import ParticleBackground from '@/assets/js/particles.js'
+
 export default {
   name: 'HomePage',
+  data() {
+    return {
+      particleEffect: null
+    }
+  },
   mounted() {
-    // 实现粒子背景效果（如需要）
+    // 初始化粒子背景效果
     this.initParticles()
+  },
+  beforeUnmount() {
+    // 组件卸载前清理粒子效果
+    if (this.particleEffect) {
+      this.particleEffect.destroy()
+    }
   },
   methods: {
     initParticles() {
-      // 如果需要实现粒子效果可在此处添加相关代码
+      // 等待DOM完全渲染
+      this.$nextTick(() => {
+        // 初始化粒子效果
+        this.particleEffect = new ParticleBackground('particleBackground', {
+          particleCount: 120,
+          particleColor: 'rgba(255, 255, 255, 0.3)',
+          lineColor: 'rgba(255, 255, 255, 0.05)',
+          particleSize: 1.5,
+          speed: 0.3,
+          proximity: 120
+        })
+      })
     }
   }
 }
-</script> 
+</script>
+
+<style scoped>
+/* 可以添加特定于Home组件的样式 */
+#particleBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: translateY(-5px) scale(1.03);
+}
+</style>
