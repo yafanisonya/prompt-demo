@@ -8,7 +8,7 @@
             <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-color to-accent-color flex items-center justify-center">
               <span class="text-xl font-bold">百</span>
             </div>
-            <h1 class="text-xl font-bold gradient-text">2024中国房地产百强</h1>
+            <h1 class="text-xl font-bold gradient-text">2025中国房地产百强</h1>
           </div>
           
           <div class="hidden md:flex items-center space-x-8">

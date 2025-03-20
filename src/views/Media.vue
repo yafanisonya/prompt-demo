@@ -7,7 +7,7 @@
       <div class="glass-effect p-12 mb-12 relative overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between">
           <div class="space-y-6 md:w-1/2">
-            <h3 class="text-3xl font-bold gradient-text">2024年度白皮书</h3>
+            <h3 class="text-3xl font-bold gradient-text">2025年度白皮书</h3>
             <p class="text-gray-400 text-lg">深度解析行业趋势，洞察未来发展方向</p>
             <button class="px-8 py-4 bg-white text-gray-900 rounded-full font-bold hover:bg-opacity-90 transition-all flex items-center space-x-2">
               <span>下载完整报告</span>
@@ -134,7 +134,7 @@ export default {
     const faqs = [
       {
         question: '如何获取完整的百强企业排名报告？',
-        answer: '您可以在本页面顶部下载完整的《2024年度白皮书》，里面包含详细的排名数据和分析报告。'
+        answer: '您可以在本页面顶部下载完整的《2025年度白皮书》，里面包含详细的排名数据和分析报告。'
       },
       {
         question: '发布会有回放视频吗？',
@@ -142,7 +142,7 @@ export default {
       },
       {
         question: '媒体可以使用报告中的图表吗？',
-        answer: '可以，媒体可以使用我们提供的图表资源，请在使用时注明"数据来源：2024中国房地产百强企业"。'
+        answer: '可以，媒体可以使用我们提供的图表资源，请在使用时注明"数据来源：2025中国房地产百强企业"。'
       },
       {
         question: '如何申请媒体采访？',

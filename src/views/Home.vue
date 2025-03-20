@@ -11,7 +11,7 @@
       <div class="hero-text-container w-full md:w-3/5 space-y-8 pt-32">
         <div class="space-y-6">
           <div class="inline-block px-4 py-2 rounded-full bg-white bg-opacity-10 backdrop-blur-sm">
-            <span class="text-sm font-medium">2024年度发布会</span>
+            <span class="text-sm font-medium">2025年度发布会</span>
           </div>
           <h2 class="hero-title">引领地产<br/>新纪元</h2>
           <h3 class="hero-subtitle">探索行业趋势 · 共创美好未来</h3>
