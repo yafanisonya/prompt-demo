@@ -346,4 +346,4 @@ export const getGrowthLineChartOptions = () => {
       }
     }]
   }
-} 
+}

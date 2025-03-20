@@ -217,20 +217,28 @@ export default {
     
     // 处理图表渲染完成事件
     const onChartRendered = (chartInstance) => {
-      const chartId = chartInstance.getDom().parentElement.getAttribute('chart-id')
-      console.log(`图表 ${chartId} 渲染完成`)
-      renderedCharts.value.add(chartId)
+      if (!chartInstance) return
       
-      // 强制触发一次resize确保尺寸正确
-      setTimeout(() => {
-        chartInstance.resize()
-      }, 50)
+      try {
+        const chartId = chartInstance.getDom().parentElement.getAttribute('chart-id')
+        console.log(`图表 ${chartId} 渲染完成`)
+        renderedCharts.value.add(chartId)
+        
+        // 强制触发一次resize确保尺寸正确
+        setTimeout(() => {
+          chartInstance.resize()
+        }, 50)
+      } catch (err) {
+        console.error('图表渲染回调错误:', err)
+      }
     }
     
     // 处理图表错误
     const onChartError = (error) => {
       console.error('图表渲染错误:', error)
-      chartErrors.value.set(error.chartId, error.message)
+      if (error && error.chartId) {
+        chartErrors.value.set(error.chartId, error.message || '未知错误')
+      }
     }
     
     // 组件挂载
@@ -274,4 +282,4 @@ export default {
     }
   }
 }
-</script> 
+</script>
