@@ -1,0 +1,58 @@
+/* 自定义动画 */
+.hover-scale {
+    transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.03);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.floating-card {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* 图表容器过渡效果 */
+.chart-container {
+    height: 400px;
+    width: 100%;
+    min-height: 300px;
+    position: relative;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    z-index: 1;
+}
+
+.chart-visible {
+    transform: translateZ(0); /* 触发硬件加速 */
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* 确保ECharts画布可见 */
+.echarts-canvas {
+    z-index: 2;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 加载完成后的状态 */
+.chart-loaded {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* 错误状态样式 */
+.chart-error {
+    text-align: center;
+    padding: 1rem;
+    color: rgb(248, 114, 114);
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    border-radius: 8px;
+} 

@@ -1,0 +1,161 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import './animations.css';
+
+:root {
+    --primary-color: #2C5F9D;
+    --accent-color: #E6B980;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --gradient-start: #0A1128;
+    --gradient-end: #1C2541;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+body {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    overflow-x: hidden;
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 导航栏样式优化 */
+.nav-container {
+    background: rgba(10, 17, 40, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-link {
+    position: relative;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--accent-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* 主视觉区域动效 */
+.hero-gradient {
+    background: linear-gradient(45deg, 
+        rgba(44, 95, 157, 0.2), 
+        rgba(230, 185, 128, 0.2));
+    filter: blur(100px);
+    border-radius: 50%;
+}
+
+.hero-text-container {
+    position: relative;
+    z-index: 2;
+}
+
+/* 按钮样式优化 */
+.primary-button {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.primary-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.primary-button:hover::before {
+    left: 100%;
+}
+
+.secondary-button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 2rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.secondary-button:hover {
+    border-color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: visible !important;
+    z-index: 1;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1.1;
+    background: linear-gradient(45deg, #fff, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #fff, var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    margin: 4rem 0;
+    opacity: 0.3;
+} 
