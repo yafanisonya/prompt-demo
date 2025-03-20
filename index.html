@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024中国房地产百强企业发布会</title>
+    
+    <!-- 修改 ECharts CDN 引用 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <!-- 其他库 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- 引入自定义CSS -->
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- 引入自定义JavaScript -->
+    <script defer src="js/particles.js"></script>
+    <script defer src="js/buildings.js"></script>
+    <script defer src="js/charts.js"></script>
+    <script defer src="js/animations.js"></script>
+    <script defer src="js/dataInsight.js"></script>
+    <script defer src="js/ranking.js"></script>
+    <script defer src="js/main.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #2C5F9D;
+            --accent-color: #E6B980;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --gradient-start: #0A1128;
+            --gradient-end: #1C2541;
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: #ffffff;
+            letter-spacing: 0.02em;
+            overflow-x: hidden;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* 导航栏样式优化 */
+        .nav-container {
+            background: rgba(10, 17, 40, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* 主视觉区域动效 */
+        .hero-gradient {
+            background: linear-gradient(45deg, 
+                rgba(44, 95, 157, 0.2), 
+                rgba(230, 185, 128, 0.2));
+            filter: blur(100px);
+            border-radius: 50%;
+        }
+        
+        .hero-text-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 按钮样式优化 */
+        .primary-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .primary-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+        
+        .primary-button:hover::before {
+            left: 100%;
+        }
+        
+        .secondary-button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .secondary-button:hover {
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: visible !important;
+            z-index: 1;
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover {
+            background: rgba(44, 95, 157, 0.3);
+        }
+        
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1.1;
+            background: linear-gradient(45deg, #fff, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #fff, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .floating-card {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            margin: 4rem 0;
+            opacity: 0.3;
+        }
+
+        /* 增加图表容器过渡效果 */
+        .chart-container {
+            height: 400px;
+            width: 100%;
+            min-height: 300px;
+            position: relative;
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: block !important;
+            z-index: 1;
+        }
+
+        .chart-visible {
+            transform: translateZ(0); /* 触发硬件加速 */
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        /* 防止父容器隐藏 */
+        .glass-effect [id$="Chart"] {
+            overflow: visible !important;
+            contain: layout style paint;
+        }
+        
+        /* 加载完成后的状态 */
+        .chart-loaded {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* 错误状态样式 */
+        .chart-error {
+            @apply text-red-400 text-center p-4;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        /* 确保ECharts画布可见 */
+        .echarts-canvas {
+            z-index: 2;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav-container fixed w-full top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-color to-accent-color flex items-center justify-center">
+                        <span class="text-xl font-bold">百</span>
+                    </div>
+                    <h1 class="text-xl font-bold gradient-text">2024中国房地产百强</h1>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#main" class="nav-link">首页</a>
+                    <a href="#ranking" class="nav-link">百强榜单</a>
+                    <a href="#data" class="nav-link">行业数据</a>
+                    <a href="#media" class="nav-link">媒体资料</a>
+                    <button class="primary-button">
+                        立即报名
+                    </button>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主视觉区域 -->
+    <section id="main" class="min-h-screen relative overflow-hidden">
+        <canvas id="particleBackground" class="absolute top-0 left-0 w-full h-full"></canvas>
+        
+        <!-- 背景渐变效果 -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 hero-gradient"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 hero-gradient"></div>
+        
+        <div class="relative z-10 container mx-auto h-full flex items-center px-6">
+            <div class="hero-text-container w-full md:w-3/5 space-y-8 pt-32">
+                <div class="space-y-6">
+                    <div class="inline-block px-4 py-2 rounded-full bg-white bg-opacity-10 backdrop-blur-sm">
+                        <span class="text-sm font-medium">2024年度发布会</span>
+                    </div>
+                    <h2 class="hero-title">引领地产<br/>新纪元</h2>
+                    <h3 class="hero-subtitle">探索行业趋势 · 共创美好未来</h3>
+                    <p class="text-xl text-gray-300 max-w-2xl leading-relaxed">
+                        汇聚行业精英，解析市场趋势，共同探讨中国房地产行业的创新与可持续发展之路
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap gap-4 pt-8">
+                    <button class="primary-button flex items-center space-x-2">
+                        <span>预约参会</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </button>
+                    <button class="secondary-button flex items-center space-x-2">
+                        <span>查看往期回顾</span>
+                    </button>
+                </div>
+                
+                <!-- 关键数据展示 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12">
+                    <div class="glass-effect p-4 text-center">
+                        <div class="text-3xl font-bold gradient-text">100+</div>
+                        <div class="text-sm text-gray-400 mt-1">参会企业</div>
+                    </div>
+                    <div class="glass-effect p-4 text-center">
+                        <div class="text-3xl font-bold gradient-text">50+</div>
+                        <div class="text-sm text-gray-400 mt-1">行业专家</div>
+                    </div>
+                    <div class="glass-effect p-4 text-center">
+                        <div class="text-3xl font-bold gradient-text">10+</div>
+                        <div class="text-sm text-gray-400 mt-1">主题论坛</div>
+                    </div>
+                    <div class="glass-effect p-4 text-center">
+                        <div class="text-3xl font-bold gradient-text">5000+</div>
+                        <div class="text-sm text-gray-400 mt-1">线上观众</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部装饰线 -->
+        <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-color to-transparent"></div>
+    </section>
+    
+    <!-- 其他部分将在后续代码块中展示 -->
+
+    <!-- 百强榜单区域 -->
+    <section id="ranking" class="min-h-screen py-20 px-4 relative">
+        <!-- 背景装饰 -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-1/4 right-1/4 w-96 h-96 hero-gradient opacity-30"></div>
+            <div class="absolute bottom-1/4 left-1/4 w-96 h-96 hero-gradient opacity-30"></div>
+        </div>
+
+        <div class="container mx-auto relative">
+            <div class="text-center mb-16">
+                <h2 class="hero-title text-4xl mb-4">百强企业榜单</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">基于企业规模、盈利能力、发展速度等多维度评估，遴选出引领行业发展的标杆企业</p>
+            </div>
+
+            <!-- 榜单展示区 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- 左侧评选维度 -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div class="glass-effect p-8 rounded-2xl">
+                        <h3 class="text-xl font-bold mb-6 gradient-text">评选维度</h3>
+                        <div class="space-y-4">
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-primary-color to-accent-color"></div>
+                                <div>
+                                    <h4 class="font-semibold">规模效益</h4>
+                                    <p class="text-sm text-gray-400">年度营收与资产规模</p>
+                                </div>
+                            </div>
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-primary-color to-accent-color opacity-80"></div>
+                                <div>
+                                    <h4 class="font-semibold">盈利能力</h4>
+                                    <p class="text-sm text-gray-400">利润率与投资回报</p>
+                                </div>
+                            </div>
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-primary-color to-accent-color opacity-60"></div>
+                                <div>
+                                    <h4 class="font-semibold">发展速度</h4>
+                                    <p class="text-sm text-gray-400">增长率与扩张能力</p>
+                                </div>
+                            </div>
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-primary-color to-accent-color opacity-40"></div>
+                                <div>
+                                    <h4 class="font-semibold">运营效率</h4>
+                                    <p class="text-sm text-gray-400">资产周转与管理水平</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 榜单概览 -->
+                    <div class="glass-effect p-8 rounded-2xl">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">入榜门槛</span>
+                                <span class="text-xl font-bold gradient-text">50亿元</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">平均规模</span>
+                                <span class="text-xl font-bold gradient-text">280亿元</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">累计营收</span>
+                                <span class="text-xl font-bold gradient-text">2.8万亿</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧3D展示区 -->
+                <div class="lg:col-span-9">
+                    <div class="glass-effect p-8 rounded-2xl h-[600px] relative overflow-hidden">
+                        <!-- 3D建筑矩阵 -->
+                        <canvas id="buildingMatrix" class="w-full h-full"></canvas>
+                        
+                        <!-- 榜单快速预览 -->
+                        <div class="absolute top-8 right-8 w-64 glass-effect p-4 rounded-xl">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-semibold">TOP 10预览</h4>
+                                <button class="text-sm text-accent-color">查看完整榜单</button>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="opacity-60">1. 碧桂园控股</span>
+                                    <span class="gradient-text">4,850亿</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="opacity-60">2. 万科企业</span>
+                                    <span class="gradient-text">4,620亿</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="opacity-60">3. 中国恒大</span>
+                                    <span class="gradient-text">4,570亿</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部数据分析 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div class="glass-effect p-6 rounded-2xl">
+                    <h4 class="text-lg font-semibold mb-4">区域分布</h4>
+                    <div id="regionPieChart" class="h-[200px]"></div>
+                </div>
+                <div class="glass-effect p-6 rounded-2xl">
+                    <h4 class="text-lg font-semibold mb-4">规模分布</h4>
+                    <div id="scalePieChart" class="h-[200px]"></div>
+                </div>
+                <div class="glass-effect p-6 rounded-2xl">
+                    <h4 class="text-lg font-semibold mb-4">增长趋势</h4>
+                    <div id="growthLineChart" class="h-[200px]"></div>
+                </div>
+            </div>
+
+            <!-- 添加企业详情弹窗 -->
+            <div id="companyDetail" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden backdrop-blur-sm">
+                <div class="container mx-auto h-full flex items-center justify-center px-4">
+                    <div class="glass-effect p-8 rounded-2xl w-full max-w-4xl relative">
+                        <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors" onclick="closeCompanyDetail()">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <div class="flex items-center space-x-4 mb-6">
+                                    <div class="w-16 h-16 rounded-xl bg-gradient-to-r from-primary-color to-accent-color flex items-center justify-center text-2xl font-bold">
+                                        1
+                                    </div>
+                                    <div>
+                                        <h3 class="text-2xl font-bold gradient-text">碧桂园控股</h3>
+                                        <p class="text-gray-400">排名上升 1 位</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <div class="glass-effect p-4 rounded-xl">
+                                        <div class="text-sm text-gray-400">年度营收</div>
+                                        <div class="text-2xl font-bold gradient-text">4,850亿元</div>
+                                        <div class="text-sm text-green-400">↑ 12.3%</div>
+                                    </div>
+                                    
+                                    <div class="glass-effect p-4 rounded-xl">
+                                        <div class="text-sm text-gray-400">总资产</div>
+                                        <div class="text-2xl font-bold gradient-text">12,680亿元</div>
+                                        <div class="text-sm text-green-400">↑ 8.7%</div>
+                                    </div>
+                                    
+                                    <div class="glass-effect p-4 rounded-xl">
+                                        <div class="text-sm text-gray-400">净利润</div>
+                                        <div class="text-2xl font-bold gradient-text">568亿元</div>
+                                        <div class="text-sm text-green-400">↑ 15.2%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div id="companyPerformanceChart" class="h-[300px]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 添加榜单切换标签 -->
+            <div class="flex justify-center mb-12">
+                <div class="glass-effect rounded-full p-1 inline-flex space-x-2">
+                    <button class="px-6 py-2 rounded-full bg-white bg-opacity-10 text-white">综合排名</button>
+                    <button class="px-6 py-2 rounded-full hover:bg-white hover:bg-opacity-5 transition-colors">规模排名</button>
+                    <button class="px-6 py-2 rounded-full hover:bg-white hover:bg-opacity-5 transition-colors">增长排名</button>
+                    <button class="px-6 py-2 rounded-full hover:bg-white hover:bg-opacity-5 transition-colors">效率排名</button>
+                </div>
+            </div>
+
+            <!-- 添加搜索功能 -->
+            <div class="max-w-xl mx-auto mb-12">
+                <div class="glass-effect rounded-full p-2 flex items-center">
+                    <input type="text" 
+                           placeholder="搜索企业名称..." 
+                           class="bg-transparent border-none outline-none px-4 py-2 w-full text-white placeholder-gray-400">
+                    <button class="p-2 hover:bg-white hover:bg-opacity-10 rounded-full transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 行业数据区域 -->
+    <section id="data" class="min-h-screen py-20 px-4 relative">
+        <!-- 背景装饰 -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-1/3 right-1/4 w-[500px] h-[500px] hero-gradient opacity-20"></div>
+            <div class="absolute bottom-1/3 left-1/4 w-[500px] h-[500px] hero-gradient opacity-20"></div>
+        </div>
+
+        <div class="container mx-auto relative">
+            <div class="text-center mb-16">
+                <h2 class="hero-title text-4xl mb-4">行业数据洞察</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">深度解析房地产行业发展趋势，多维度呈现市场动态</p>
+            </div>
+
+            <!-- 数据概览卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="glass-effect p-6 hover-scale">
+                    <div class="flex items-start space-x-4">
+                        <div class="p-3 rounded-xl bg-white bg-opacity-10">
+                            <svg class="w-8 h-8 text-accent-color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">总投资规模</div>
+                            <div class="text-2xl font-bold gradient-text mt-1">13.7万亿</div>
+                            <div class="text-sm text-green-400 flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                                3.2%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect p-6 hover-scale" style="animation-delay: 0.2s;">
+                    <div class="flex items-start space-x-4">
+                        <div class="p-3 rounded-xl bg-white bg-opacity-10">
+                            <svg class="w-8 h-8 text-accent-color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">百强市占率</div>
+                            <div class="text-2xl font-bold gradient-text mt-1">46.8%</div>
+                            <div class="text-sm text-green-400 flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                                2.1%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect p-6 hover-scale" style="animation-delay: 0.4s;">
+                    <div class="flex items-start space-x-4">
+                        <div class="p-3 rounded-xl bg-white bg-opacity-10">
+                            <svg class="w-8 h-8 text-accent-color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">平均利润率</div>
+                            <div class="text-2xl font-bold gradient-text mt-1">15.3%</div>
+                            <div class="text-sm text-green-400 flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                               行业领先水平
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect p-6 hover-scale" style="animation-delay: 0.6s;">
+                    <div class="flex items-start space-x-4">
+                        <div class="p-3 rounded-xl bg-white bg-opacity-10">
+                            <svg class="w-8 h-8 text-accent-color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400">研发投入</div>
+                            <div class="text-2xl font-bold gradient-text mt-1">285亿</div>
+                            <div class="text-sm text-green-400 flex items-center mt-1">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                                18.5%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 主要数据图表区域 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- 投资趋势分析 -->
+                <div class="glass-effect p-8 rounded-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold">投资趋势分析</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-4 py-1 rounded-full text-sm bg-white bg-opacity-10 hover:bg-opacity-20 transition-colors">
+                                月度
+                            </button>
+                            <button class="px-4 py-1 rounded-full text-sm bg-white bg-opacity-10 hover:bg-opacity-20 transition-colors">
+                                季度
+                            </button>
+                            <button class="px-4 py-1 rounded-full text-sm bg-white bg-opacity-10 hover:bg-opacity-20 transition-colors">
+                                年度
+                            </button>
+                        </div>
+                    </div>
+                    <div id="investmentChart" class="chart-container h-[400px]"></div>
+                </div>
+
+                <!-- 区域分布格局 -->
+                <div class="glass-effect p-8 rounded-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold">区域分布格局</h3>
+                        <div class="flex items-center space-x-4">
+                            <select class="bg-transparent border border-white border-opacity-20 rounded-lg px-3 py-1 text-sm">
+                                <option value="investment">投资额</option>
+                                <option value="projects">项目数</option>
+                                <option value="area">建筑面积</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="regionChart" class="chart-container h-[400px]"></div>
+                </div>
+            </div>
+
+            <!-- 融资结构与宏观经济 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 融资结构分析 -->
+                <div class="glass-effect p-8 rounded-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold">融资结构分析</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-primary-color"></div>
+                            <span class="text-sm text-gray-400">银行贷款</span>
+                            <div class="w-3 h-3 rounded-full bg-accent-color ml-4"></div>
+                            <span class="text-sm text-gray-400">债券融资</span>
+                            <div class="w-3 h-3 rounded-full bg-green-400 ml-4"></div>
+                            <span class="text-sm text-gray-400">股权融资</span>
+                        </div>
+                    </div>
+                    <div id="financingChart" class="chart-container h-[400px]"></div>
+                </div>
+
+                <!-- 宏观经济关联 -->
+                <div class="glass-effect p-8 rounded-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold">宏观经济关联</h3>
+                        <button class="text-sm text-accent-color hover:underline">
+                            查看详细分析
+                        </button>
+                    </div>
+                    <div id="economySphere" class="chart-container h-[400px]"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 媒体资料区域 -->
+    <section id="media" class="min-h-screen py-20 px-4">
+        <div class="container mx-auto">
+            <h2 class="hero-title text-4xl mb-16">媒体资料</h2>
+            
+            <!-- 主要报告下载 -->
+            <div class="glass-effect p-12 mb-12 relative overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="space-y-6 md:w-1/2">
+                        <h3 class="text-3xl font-bold gradient-text">2024年度白皮书</h3>
+                        <p class="text-gray-400 text-lg">深度解析行业趋势，洞察未来发展方向</p>
+                        <button class="px-8 py-4 bg-white text-gray-900 rounded-full font-bold hover:bg-opacity-90 transition-all flex items-center space-x-2">
+                            <span>下载完整报告</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="md:w-1/3 mt-8 md:mt-0">
+                        <!-- <img src="assets/report-preview.png" alt="报告预览" class="w-full rounded-lg shadow-2xl"> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 其他资料卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-effect p-8 hover:scale-105 transition-all cursor-pointer">
+                    <div class="flex items-start space-x-4">
+                        <div class="p-4 rounded-full bg-white bg-opacity-10">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">发布会回放</h3>
+                            <p class="text-gray-400 mt-2">完整发布会视频与精彩集锦</p>
+                            <span class="inline-block mt-4 text-accent-color">观看视频 →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect p-8 hover:scale-105 transition-all cursor-pointer">
+                    <div class="flex items-start space-x-4">
+                        <div class="p-4 rounded-full bg-white bg-opacity-10">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">数据图表集</h3>
+                            <p class="text-gray-400 mt-2">高清可视化图表与解读</p>
+                            <span class="inline-block mt-4 text-accent-color">查看详情 →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect p-8 hover:scale-105 transition-all cursor-pointer">
+                    <div class="flex items-start space-x-4">
+                        <div class="p-4 rounded-full bg-white bg-opacity-10">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">新闻资料包</h3>
+                            <p class="text-gray-400 mt-2">媒体素材与新闻通稿</p>
+                            <span class="inline-block mt-4 text-accent-color">下载资料 →</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="py-12 px-4 border-t border-white border-opacity-10">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-8 md:mb-0">
+                    <h3 class="text-xl font-bold gradient-text">中国房地产百强企业</h3>
+                    <p class="text-gray-400 mt-2">引领行业发展 · 共创美好未来</p>
+                </div>
+                <div class="flex space-x-8">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">联系方式</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
